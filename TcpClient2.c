@@ -31,8 +31,10 @@ int main() {
         read(sockfd, buffer, MAX);
         printf("Server: %s", buffer);
 
-        if (strncmp(buffer, "exit", 4) == 0)
+        if (strncmp(buffer, "exit", 4) == 0){
+            printf("Exitted Successfully!\n");
             break;
+        }
     }
 
     close(sockfd);

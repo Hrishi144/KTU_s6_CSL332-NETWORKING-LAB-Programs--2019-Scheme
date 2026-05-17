@@ -36,8 +36,10 @@ int main() {
 
         write(connfd, buffer, MAX);
 
-        if (strncmp(buffer, "exit", 4) == 0)
+        if (strncmp(buffer, "exit", 4) == 0){
+            printf("Exitted Successfully!\n");
             break;
+        }
     }
 
     close(connfd);
