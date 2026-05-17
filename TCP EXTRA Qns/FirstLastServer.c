@@ -3,16 +3,15 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <ctype.h>
 
 #define PORT 8080
 #define MAX 100
 
 int main() {
     int sockfd, connfd;
-    struct sockaddr_in server;
+    struct sockaddr_in server, client;
     char buffer[MAX], result[MAX];
-    int i, j;
+    int n, first, last;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -32,26 +31,16 @@ int main() {
         bzero(buffer, MAX);
         read(connfd, buffer, MAX);
 
-        printf("Client: %s", buffer);
+        n = atoi(buffer);
 
-        if (strncmp(buffer, "exit", 4) == 0)
-            break;
+        last = n % 10;
 
-        bzero(result, MAX);
-        j = 0;
+        while (n >= 10)
+            n = n / 10;
 
-        if (buffer[0] != ' ')
-            result[j++] = toupper(buffer[0]);
+        first = n;
 
-        for (i = 1; buffer[i] != '\0'; i++) {
-            if (buffer[i] == ' ' && buffer[i+1] != ' ')
-                result[j++] = toupper(buffer[i+1]);
-        }
-
-        result[j] = '\0';
-
-        printf("Abbreviation: %s\n", result);
-
+        sprintf(result, "First Digit = %d , Last Digit = %d", first, last);
         write(connfd, result, MAX);
     }
 

@@ -3,16 +3,15 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <ctype.h>
 
 #define PORT 8080
 #define MAX 100
 
 int main() {
     int sockfd, connfd;
-    struct sockaddr_in server;
-    char buffer[MAX], result[MAX];
-    int i, j;
+    struct sockaddr_in server, client;
+    char buffer[MAX];
+    int n, i, isPrime = 1;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -32,27 +31,28 @@ int main() {
         bzero(buffer, MAX);
         read(connfd, buffer, MAX);
 
-        printf("Client: %s", buffer);
+        n = atoi(buffer);
 
-        if (strncmp(buffer, "exit", 4) == 0)
-            break;
+        isPrime = 1;
 
-        bzero(result, MAX);
-        j = 0;
+        if (n <= 1)
+            isPrime = 0;
 
-        if (buffer[0] != ' ')
-            result[j++] = toupper(buffer[0]);
-
-        for (i = 1; buffer[i] != '\0'; i++) {
-            if (buffer[i] == ' ' && buffer[i+1] != ' ')
-                result[j++] = toupper(buffer[i+1]);
+        for (i = 2; i <= n / 2; i++) {
+            if (n % i == 0) {
+                isPrime = 0;
+                break;
+            }
         }
 
-        result[j] = '\0';
+        bzero(buffer, MAX);
 
-        printf("Abbreviation: %s\n", result);
+        if (isPrime)
+            strcpy(buffer, "Prime Number");
+        else
+            strcpy(buffer, "Not Prime Number");
 
-        write(connfd, result, MAX);
+        write(connfd, buffer, MAX);
     }
 
     close(connfd);

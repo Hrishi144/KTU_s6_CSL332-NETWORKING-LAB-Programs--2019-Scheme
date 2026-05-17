@@ -23,7 +23,7 @@ int main() {
     printf("Connected to server\n");
 
     while (1) {
-        printf("Client: ");
+        printf("Enter Number: ");
         fgets(buffer, MAX, stdin);
 
         write(sockfd, buffer, MAX);
@@ -32,11 +32,10 @@ int main() {
             printf("Exited Successfully!\n");
             break;
         }
-
-        bzero(buffer, MAX);
+        
         read(sockfd, buffer, MAX);
 
-        printf("Server (Abbreviation): %s\n", buffer);
+        printf("Condensed Number: %s\n", buffer);
     }
 
     close(sockfd);
